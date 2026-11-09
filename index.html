@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>AppNest - Discover. Download. Enjoy.</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#14123B;--blue:#2F5BFF;--vio:#7A3CFF;--mist:#F3F2FF;--line:#E4E1FA;--mut:#6B6890;--g:linear-gradient(135deg,#2F5BFF,#7A3CFF)}
+*{box-sizing:border-box;margin:0}
+body{font:15px/1.5 Inter,system-ui,sans-serif;color:var(--ink);background:#fff;padding-bottom:76px}
+a{color:inherit;text-decoration:none}
+#main{max-width:980px;margin:auto;padding:16px}
+.pad{padding:8px 0}
+h1{font-size:clamp(26px,6vw,40px);font-weight:800;letter-spacing:-.03em;line-height:1.1}
+h2{font-size:20px;font-weight:700;margin:22px 0 10px}
+.hero{background:var(--g);color:#fff;border-radius:24px;padding:28px 20px;margin-bottom:8px}
+.hero input{margin-top:16px;border:0;box-shadow:0 8px 24px #14123b44}
+input,select,textarea{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;font:inherit;background:#fff;color:var(--ink);margin:4px 0}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid #7A3CFF55}
+textarea{min-height:90px}
+.btn{display:inline-flex;gap:6px;align-items:center;justify-content:center;border:0;border-radius:12px;padding:11px 18px;font:600 14px Inter;cursor:pointer;background:var(--g);color:#fff;transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 6px 16px #7A3CFF44}
+.btn.o{background:var(--mist);color:var(--blue)}.btn.r{background:#FFE9EE;color:#C0243F}.btn.s{padding:6px 11px;font-size:12px}
+.row{display:flex;gap:12px;overflow-x:auto;padding:4px 2px 12px;scroll-snap-type:x mandatory}
+.app{flex:0 0 132px;scroll-snap-align:start;background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px;box-shadow:0 4px 14px #7A3CFF14;transition:transform .2s}
+.app:hover{transform:translateY(-3px)}
+.app img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:16px;background:var(--mist)}
+.app b{display:block;margin-top:8px;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.app small,.mut{color:var(--mut);font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}.grid .app{flex:auto}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:12px 0}
+.chip{white-space:nowrap;padding:7px 14px;border-radius:99px;background:var(--mist);color:var(--blue);font-weight:600;font-size:13px;cursor:pointer;border:0}
+.chip.on{background:var(--g);color:#fff}
+.card{border:1px solid var(--line);border-radius:18px;padding:16px;margin:10px 0;box-shadow:0 4px 14px #7A3CFF10}
+.hd{display:flex;gap:16px;align-items:center}.hd img{width:92px;height:92px;border-radius:22px;object-fit:cover}
+.shots{display:flex;gap:10px;overflow-x:auto;margin:14px 0}.shots img{height:260px;border-radius:14px;border:1px solid var(--line)}
+.it{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}.it img{width:44px;height:44px;border-radius:12px;object-fit:cover}.it .g{flex:1;min-width:140px}
+.badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;background:var(--mist);color:var(--blue)}
+.badge.published{background:#DFF7E8;color:#12794A}.badge.rejected,.badge.banned{background:#FFE9EE;color:#C0243F}.badge.pending{background:#FFF3D6;color:#9A6200}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}.stats div{background:var(--mist);border-radius:16px;padding:14px}.stats b{font-size:26px;display:block}
+.tabs{display:flex;gap:8px;overflow-x:auto;margin-bottom:10px}
+progress{width:100%;height:8px;accent-color:var(--vio)}
+nav{position:fixed;z-index:5;background:#fff;display:flex;gap:2px;border-top:1px solid var(--line);left:0;right:0;bottom:0;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));justify-content:space-around}
+nav a{flex:1;text-align:center;font-size:11px;font-weight:600;color:var(--mut);padding:6px 2px;border-radius:12px}
+nav a.on{color:var(--vio);background:var(--mist)}nav a i{display:block;font-style:normal;font-size:19px}
+nav .lg{display:none}nav.hide{display:none}
+#toast{position:fixed;left:50%;bottom:90px;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:10px 18px;border-radius:12px;opacity:0;pointer-events:none;transition:.25s;z-index:9;max-width:90vw}#toast.on{opacity:1;transform:translate(-50%,0)}
+.auth{max-width:380px;margin:6vh auto}.logo{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:800;margin-bottom:14px}
+pre{overflow:auto;background:var(--ink);color:#E9E7FF;padding:14px;border-radius:12px;font-size:12px;max-height:340px}
+@media(min-width:900px){body{padding:0 0 0 220px}nav{top:0;right:auto;bottom:0;width:220px;flex-direction:column;justify-content:flex-start;border-top:0;border-right:1px solid var(--line);padding:20px 12px}
+nav a{flex:none;text-align:left;font-size:14px;padding:11px 14px}nav a i{display:inline;margin-right:10px}nav .lg{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;margin-bottom:18px}
+.app{flex-basis:150px}#toast{bottom:30px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head>
+<body>
+<nav id="nav" class="hide"></nav><main id="main"></main><div id="toast"></div>
+
+<!-- Backend files (shown on the #/setup page with copy buttons) -->
+<script type="text/plain" id="t-db">{"rules":{
+".read":false,".write":false,
+"meta":{"superAdmin":{".read":"data.val()==auth.uid",".write":"auth!=null&&!data.exists()&&newData.val()==auth.uid"}},
+"users":{".read":"root.child('users/'+auth.uid+'/role').val()=='admin'","$uid":{".read":"auth.uid==$uid",".write":"auth.uid==$uid&&!data.exists()",
+ ".validate":"data.exists()||(newData.hasChildren(['name','role','status'])&&newData.child('status').val()=='active'&&newData.child('role').val()==(root.child('meta/superAdmin').val()==$uid?'admin':'user'))",
+ "name":{".write":"auth.uid==$uid",".validate":"newData.isString()&&newData.val().length<=60"},
+ "role":{".write":"root.child('users/'+auth.uid+'/role').val()=='admin'&&$uid!=root.child('meta/superAdmin').val()",".validate":"newData.val()=='user'||newData.val()=='developer'||(newData.val()=='admin'&&root.child('meta/superAdmin').val()==$uid)"},
+ "status":{".write":"root.child('users/'+auth.uid+'/role').val()=='admin'&&$uid!=root.child('meta/superAdmin').val()",".validate":"newData.val()=='active'||newData.val()=='banned'"}}},
+"devProfiles":{".read":true,"$uid":{".write":"auth.uid==$uid&&root.child('users/'+auth.uid+'/role').val()=='developer'&&root.child('users/'+auth.uid+'/status').val()=='active'",".validate":"newData.hasChildren(['name'])"}},
+"devRequests":{".read":"root.child('users/'+auth.uid+'/role').val()=='admin'",".write":"root.child('users/'+auth.uid+'/role').val()=='admin'","$uid":{".read":"auth.uid==$uid",".write":"auth.uid==$uid&&root.child('users/'+auth.uid+'/role').val()=='user'&&root.child('users/'+auth.uid+'/status').val()=='active'&&(!data.exists()||data.child('status').val()=='rejected')",".validate":"newData.child('status').val()=='pending'||root.child('users/'+auth.uid+'/role').val()=='admin'"}},
+"catalog":{".read":true,".write":"root.child('users/'+auth.uid+'/role').val()=='admin'","$id":{"downloads":{".write":"auth!=null&&root.child('users/'+auth.uid+'/status').val()=='active'&&newData.isNumber()&&newData.val()==data.val()+1"}}},
+"apps":{".read":"root.child('users/'+auth.uid+'/role').val()=='admin'",".write":"root.child('users/'+auth.uid+'/role').val()=='admin'","$uid":{".read":"auth.uid==$uid",".write":"auth.uid==$uid&&root.child('users/'+auth.uid+'/role').val()=='developer'&&root.child('users/'+auth.uid+'/status').val()=='active'","$appId":{".validate":"root.child('users/'+auth.uid+'/role').val()=='admin'||(newData.child('status').val()=='pending'&&newData.child('ownerUid').val()==$uid&&newData.child('apkUrl').val().beginsWith('https://'))"}}},
+"reviews":{".read":true,".write":"root.child('users/'+auth.uid+'/role').val()=='admin'","$appId":{"$uid":{".write":"auth.uid==$uid&&root.child('users/'+auth.uid+'/status').val()=='active'",".validate":"newData.hasChildren(['rating','text','name','ts'])&&newData.child('rating').isNumber()&&newData.child('rating').val()>=1&&newData.child('rating').val()<=5&&newData.child('text').val().length<=1000"}}},
+"favs":{"$uid":{".read":"auth.uid==$uid",".write":"auth.uid==$uid&&root.child('users/'+auth.uid+'/status').val()=='active'"}},
+"history":{"$uid":{".read":"auth.uid==$uid",".write":"auth.uid==$uid&&root.child('users/'+auth.uid+'/status').val()=='active'"}},
+"reports":{".read":"root.child('users/'+auth.uid+'/role').val()=='admin'",".write":"root.child('users/'+auth.uid+'/role').val()=='admin'","$id":{".write":"auth!=null&&root.child('users/'+auth.uid+'/status').val()=='active'&&!data.exists()",".validate":"newData.hasChildren(['appId','reason','by','ts'])&&newData.child('by').val()==auth.uid"}},
+"categories":{".read":true,".write":"root.child('users/'+auth.uid+'/role').val()=='admin'"}
+}}</script>
+<script type="text/plain" id="t-st">rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Optional: only needed if developers upload APK files here (images go to ImgBB).
+    // Create-only, so an approved APK can never be overwritten.
+    match /apks/{uid}/{appId}/{file} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.auth.uid == uid
+        && file.matches('.*\\.apk')
+        && request.resource.size < 150 * 1024 * 1024
+        && request.resource.contentType in ['application/vnd.android.package-archive','application/octet-stream'];
+    }
+  }
+}</script>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import {getAuth,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,signInWithPopup,GoogleAuthProvider,signOut,updateProfile} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import {getDatabase,ref,get,set,update,push,remove,increment} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+import {getStorage,ref as sref,uploadBytesResumable,getDownloadURL} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js";
+
+// ===== Paste your Firebase web app config here (Console > Project settings > Your apps) =====
+const CFG={apiKey:"PASTE_API_KEY",authDomain:"store-9062b.firebaseapp.com",databaseURL:"https://store-9062b-default-rtdb.firebaseio.com",
+projectId:"store-9062b",storageBucket:"store-9062b.appspot.com",messagingSenderId:"PASTE_SENDER_ID",appId:"PASTE_APP_ID"};
+const IMGBB_KEY="PASTE_IMGBB_API_KEY"; // free key from api.imgbb.com
+// ============================================================================================
+const fb=initializeApp(CFG),auth=getAuth(fb),db=getDatabase(fb),st=getStorage(fb);
+const $=s=>document.querySelector(s),esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const val=async p=>(await get(ref(db,p))).val();
+const toast=m=>{const t=$("#toast");t.textContent=m;t.classList.add("on");setTimeout(()=>t.classList.remove("on"),3000)};
+const fmt=b=>b>1048576?(b/1048576).toFixed(1)+" MB":Math.ceil((b||0)/1024)+" KB",dt=t=>new Date(t).toLocaleDateString();
+const guard=f=>async(...a)=>{try{await f(...a)}catch(e){console.error(e);toast((e.message||"Something went wrong").replace("Firebase: ",""))}};
+const LOGO='<svg viewBox="0 0 40 40" width="34" height="34"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2F5BFF"/><stop offset="1" stop-color="#7A3CFF"/></linearGradient></defs><rect width="40" height="40" rx="12" fill="url(#lg)"/><path d="M8 22c2 8 22 8 24 0" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M20 9v14m-6-6 6 6 6-6" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const DEFCATS=["Games","Tools","Social","Education","Entertainment","Productivity"];
+let me=null,cat={},cats=DEFCATS,S={q:"",c:"",tab:"over",reg:false},E=null,regName="";
+const list=()=>Object.entries(cat).map(([id,a])=>({id,...a}));
+const tile=a=>`<a class="app" href="#/app/${a.id}"><img src="${esc(a.icon)}" alt="" loading="lazy"><b>${esc(a.name)}</b><small>${esc(a.category)}, ${fmt(a.size)}</small></a>`;
+const rowOf=(t,L)=>L.length?`<h2>${t}</h2><div class="row">${L.map(tile).join("")}</div>`:"";
+const stars=n=>"★".repeat(Math.round(n))+"☆".repeat(5-Math.round(n));
+const avg=r=>{const v=Object.values(r||{});return v.length?v.reduce((s,x)=>s+x.rating,0)/v.length:0};
+
+async function load(){cat=await val("catalog")||{};const c=await val("categories");if(c)cats=Object.values(c).map(x=>x.name)}
+onAuthStateChanged(auth,async u=>{
+ if(!u){me=null;return route()}
+ try{
+  let r=await val("users/"+u.uid).catch(()=>null);
+  if(!r){ // first sign-in: the first-admin claim is enforced atomically by the database rules
+   try{await set(ref(db,"meta/superAdmin"),u.uid)}catch{} // fails if an admin already exists
+   const adm=(await val("meta/superAdmin").catch(()=>null))===u.uid;
+   await set(ref(db,"users/"+u.uid),{name:regName||u.displayName||(u.email||"user").split("@")[0],email:u.email||"",role:adm?"admin":"user",status:"active",created:Date.now()});
+   r=await val("users/"+u.uid)}
+  if(r.status==="banned"){await signOut(auth);toast("This account is suspended");return}
+  me={uid:u.uid,name:r.name,role:r.role};regName="";
+  await load();route()
+ }catch(e){console.error(e);toast(e.message)}});
+addEventListener("hashchange",route);
+
+const V={};
+async function route(){
+ const [p,a]=location.hash.slice(2).split("/"),nav=$("#nav");
+ if(p==="setup"){nav.className="hide";return show(await V.setup())}
+ if(!me){nav.className="hide";return show(V.auth())}
+ const items=[["home","⌂","Home"],["search","⌕","Search"],["lib","♥","Library"],["me","☺","Profile"]];
+ if(me.role==="developer")items.push(["dev","⇪","Developer"]);
+ if(me.role==="admin")items.push(["admin","⚙","Admin"]);
+ nav.className="";nav.innerHTML=`<div class="lg">${LOGO}AppNest</div>`+items.map(i=>`<a href="#/${i[0]}" class="${(p||"home")==i[0]?"on":""}"><i>${i[1]}</i>${i[2]}</a>`).join("");
+ try{show(await (V[p]||V.home)(a))}catch(e){console.error(e);show(`<div class="card">Could not load this page: ${esc(e.message)}</div>`)}
+}
+const show=h=>{$("#main").innerHTML=h;scrollTo(0,0)};
+
+V.auth=()=>`<section class="auth"><div class="logo">${LOGO}AppNest</div><h1>Discover. Download. Enjoy.</h1><p class="mut" style="margin:8px 0 16px">${S.reg?"Create your account.":"Sign in to browse and download apps."}</p>
+<form onsubmit="A.login(event)">${S.reg?'<input name="name" placeholder="Your name" required>':""}<input name="email" type="email" placeholder="Email" required><input name="pw" type="password" placeholder="Password (6+ characters)" minlength="6" required>
+<button class="btn" style="width:100%;margin-top:8px">${S.reg?"Create account":"Sign in"}</button></form>
+<button class="btn o" style="width:100%;margin-top:8px" onclick="A.google()">Continue with Google</button>
+<p style="margin-top:14px;text-align:center"><a href="#" onclick="A.toggleReg();return false" style="color:var(--blue);font-weight:600">${S.reg?"I already have an account":"Create an account"}</a> &nbsp; <a href="#/setup" class="mut">Setup guide</a></p></section>`;
+
+V.home=async()=>{const L=list(),tr=L.filter(a=>a.trending),by=[...L].sort((a,b)=>(b.downloads||0)-(a.downloads||0));
+ return `<header class="hero"><h1>Discover. Download. Enjoy.</h1><input id="q" placeholder="Search apps by name" onkeydown="if(event.key=='Enter')A.search(this.value)"></header>
+ <div class="chips">${cats.map(c=>`<button class="chip" onclick="A.cat('${esc(c)}')">${esc(c)}</button>`).join("")}</div>`
+ +rowOf("Featured",L.filter(a=>a.featured))+rowOf("Trending",tr.length?tr:by.slice(0,10))+rowOf("Recently updated",[...L].sort((a,b)=>b.updated-a.updated).slice(0,10))
+ +(L.length?"":`<div class="card">No apps are published yet. Developers can submit apps for review.</div>`)};
+V.search=async()=>{const q=S.q.toLowerCase(),L=list().filter(a=>a.name.toLowerCase().includes(q)&&(!S.c||a.category===S.c));
+ return `<input id="q" value="${esc(S.q)}" placeholder="Search apps by name" onkeydown="if(event.key=='Enter')A.search(this.value)"><div class="chips"><button class="chip ${S.c?"":"on"}" onclick="A.cat('')">All</button>${cats.map(c=>`<button class="chip ${S.c===c?"on":""}" onclick="A.cat('${esc(c)}')">${esc(c)}</button>`).join("")}</div>
+ <div class="grid">${L.map(tile).join("")||'<p class="mut">No apps match. Try another name or category.</p>'}</div>`};
+V.app=async id=>{const a=cat[id];if(!a)return `<div class="card">This app is not available.</div>`;
+ const rv=await val("reviews/"+id)||{},fav=await val(`favs/${me.uid}/${id}`),r=avg(rv),mine=rv[me.uid];
+ return `<div class="hd"><img src="${esc(a.icon)}" alt=""><div><h1 style="font-size:24px">${esc(a.name)}</h1><div class="mut">${esc(a.devName)}</div><div style="color:var(--vio)">${stars(r)} <span class="mut">${r?r.toFixed(1):"No ratings"} (${Object.keys(rv).length})</span></div></div></div>
+ <div class="stats" style="margin:14px 0"><div><b>${esc(a.version)}</b>Version</div><div><b>${fmt(a.size)}</b>Size</div><div><b>${a.downloads||0}</b>Downloads</div><div><b>${dt(a.updated)}</b>Updated</div></div>
+ <button class="btn" onclick="A.dl('${id}')">Download APK</button> <button class="btn o" onclick="A.fav('${id}',${!!fav})">${fav?"Remove favourite":"Add to favourites"}</button> <button class="btn r" onclick="A.report('${id}')">Report</button>
+ <progress id="pg" value="0" max="100" hidden style="margin-top:12px"></progress>
+ <div class="shots">${(a.screenshots||[]).map(s=>`<img src="${esc(s)}" alt="Screenshot" loading="lazy">`).join("")}</div>
+ <h2>About</h2><p style="white-space:pre-wrap">${esc(a.description)}</p>${a.changelog?`<h2>What's new</h2><p style="white-space:pre-wrap">${esc(a.changelog)}</p>`:""}
+ <h2>Ratings and reviews</h2><div class="card"><select id="rt">${[5,4,3,2,1].map(n=>`<option ${mine&&mine.rating==n?"selected":""}>${n}</option>`).join("")}</select><textarea id="rx" maxlength="1000" placeholder="Write a review">${esc(mine?.text||"")}</textarea><button class="btn" onclick="A.review('${id}')">${mine?"Update review":"Post review"}</button></div>
+ ${Object.values(rv).sort((x,y)=>y.ts-x.ts).map(x=>`<div class="it"><div class="g"><b>${esc(x.name)}</b> <span style="color:var(--vio)">${stars(x.rating)}</span><br>${esc(x.text)}</div><span class="mut">${dt(x.ts)}</span></div>`).join("")}`};
+V.lib=async()=>{const f=Object.keys(await val("favs/"+me.uid)||{}).filter(i=>cat[i]).map(i=>({id:i,...cat[i]})),h=Object.values(await val("history/"+me.uid)||{}).sort((a,b)=>b.ts-a.ts);
+ return `<h2>Favourites</h2><div class="grid">${f.map(tile).join("")||'<p class="mut">Tap "Add to favourites" on any app to save it here.</p>'}</div><h2>Download history</h2>${h.map(x=>`<a class="it" href="#/app/${x.appId}"><img src="${esc(x.icon)}" alt=""><div class="g"><b>${esc(x.name)}</b><br><small class="mut">Version ${esc(x.version)}</small></div><span class="mut">${dt(x.ts)}</span></a>`).join("")||'<p class="mut">No downloads yet.</p>'}`};
+V.me=async()=>{const rq=me.role==="user"?await val("devRequests/"+me.uid):null;
+ return `<h2>Profile</h2><div class="card"><input id="pn" value="${esc(me.name)}" placeholder="Display name"><p class="mut" style="margin:6px 0 10px">${esc(auth.currentUser.email)} · Role: ${esc(me.role)}</p><button class="btn" onclick="A.saveName()">Save changes</button> <button class="btn o" onclick="A.out()">Sign out</button></div>
+ ${me.role==="user"?`<h2>Become a developer</h2><div class="card">${rq&&rq.status==="pending"?'<p>Your request is pending review by the admin.</p>':rq&&rq.status==="approved"?"<p>Approved. Reload the page to unlock the developer panel.</p>":`${rq?'<p class="mut">Your last request was rejected. You can send a new one.</p>':""}<input id="dc" placeholder="Studio or company name"><textarea id="dn" placeholder="What do you plan to publish?"></textarea><button class="btn" onclick="A.reqDev()">Request developer access</button>`}</div>`:""}`};
+
+V.dev=async()=>{
+ if(me.role!=="developer")return `<div class="card">Developer access is required. Request it from your profile.</div>`;
+ const mine=await val("apps/"+me.uid)||{},pf=await val("devProfiles/"+me.uid)||{},e=(E&&mine[E])||{},ids=Object.keys(mine);
+ const rv=await Promise.all(ids.map(i=>val("reviews/"+i)));
+ return `<h2>Developer profile</h2><div class="card"><input id="dpn" placeholder="Developer name" value="${esc(pf.name||"")}"><input id="dpw" placeholder="Website (optional)" value="${esc(pf.site||"")}"><textarea id="dpb" placeholder="About you">${esc(pf.bio||"")}</textarea><button class="btn" onclick="A.saveProf()">Save profile</button></div>
+ <h2>My apps</h2>${ids.map((i,k)=>{const a=mine[i];return `<div class="it"><img src="${esc(a.icon)}" alt=""><div class="g"><b>${esc(a.name)}</b> <span class="badge ${a.status}">${a.status}</span><br><small class="mut">v${esc(a.version)} · ${cat[i]?.downloads||0} downloads · ${avg(rv[k])?avg(rv[k]).toFixed(1)+" ★ ("+Object.keys(rv[k]||{}).length+" reviews)":"no ratings"}${a.reviewNote?" · Note: "+esc(a.reviewNote):""}</small></div>
+ <a class="btn o s" href="#/app/${i}">View</a><button class="btn o s" onclick="A.edit('${i}')">Edit or update</button><button class="btn r s" onclick="A.delApp('${i}')">Delete</button></div>`}).join("")||'<p class="mut">You have not submitted any apps yet.</p>'}
+ <h2>${E?"Edit app or upload a new version":"Submit a new app"}</h2><form class="card" id="af" onsubmit="A.save(event)">
+ <input name="name" placeholder="App name" required maxlength="60" value="${esc(e.name||"")}"><select name="cat">${cats.map(c=>`<option ${e.category===c?"selected":""}>${esc(c)}</option>`).join("")}</select>
+ <textarea name="desc" placeholder="Description" required maxlength="4000">${esc(e.description||"")}</textarea>
+ <input name="ver" placeholder="Version name (e.g. 1.2.0)" required value="${esc(e.version||"")}"><input name="vc" type="number" min="1" placeholder="Version code (integer, must increase)" required value="${e.versionCode||""}">
+ <textarea name="log" placeholder="Changelog">${esc(e.changelog||"")}</textarea>
+ <label class="mut">APK file ${E?"(only to upload a new version)":""}</label><input name="apk" type="file" accept=".apk,application/vnd.android.package-archive"><label class="mut">Or paste a direct https link to the APK, and its size</label><input name="link" type="url" placeholder="https://example.com/app.apk"><input name="mb" type="number" step="0.1" min="0.1" placeholder="Size in MB (for links)">
+ <label class="mut">Icon (PNG, JPG or WebP, max 5 MB, hosted on ImgBB) ${E?"(optional)":""}</label><input name="icon" type="file" accept="image/png,image/jpeg,image/webp">
+ <label class="mut">Screenshots (up to 6) ${E?"(optional, replaces existing)":""}</label><input name="shots" type="file" accept="image/png,image/jpeg,image/webp" multiple>
+ <p class="mut" style="margin:8px 0">Every submission or update waits for admin approval before it goes live.</p><progress id="up" value="0" max="100" hidden></progress>
+ <button class="btn" id="sv">${E?"Save and resubmit":"Submit for review"}</button>${E?' <button type="button" class="btn o" onclick="A.edit(null)">Cancel</button>':""}</form>`};
+
+V.admin=async()=>{
+ if(me.role!=="admin")return `<div class="card">Only the Super Admin can open this panel.</div>`;
+ const T=[["over","Overview"],["apps","Apps"],["users","People"],["rep","Reports"],["rev","Reviews"],["cats","Categories"]];let b="";
+ const flat=async()=>{const o=await val("apps")||{};return Object.entries(o).flatMap(([u,x])=>Object.entries(x).map(([id,a])=>({u,id,...a})))};
+ if(S.tab==="over"){const us=await val("users")||{},ap=await flat(),UL=Object.values(us),dl=Object.values(cat).reduce((s,a)=>s+(a.downloads||0),0);
+  b=`<div class="stats"><div><b>${UL.length}</b>Users</div><div><b>${UL.filter(x=>x.role==="developer").length}</b>Developers</div><div><b>${ap.length}</b>Apps</div><div><b>${ap.filter(a=>a.status==="pending").length}</b>Pending</div><div><b>${dl}</b>Downloads</div></div><h2>Recent activity</h2>`+
+  [...ap].sort((x,y)=>y.updated-x.updated).slice(0,8).map(a=>`<div class="it"><div class="g"><b>${esc(a.name)}</b> v${esc(a.version)} by ${esc(a.devName)}</div><span class="badge ${a.status}">${a.status}</span><span class="mut">${dt(a.updated)}</span></div>`).join("")}
+ if(S.tab==="apps"){b=(await flat()).sort((x,y)=>(x.status==="pending"?0:1)-(y.status==="pending"?0:1)).map(a=>{const c=cat[a.id];return `<div class="it"><img src="${esc(a.icon)}" alt=""><div class="g"><b>${esc(a.name)}</b> <span class="badge ${a.status}">${a.status}</span><br><small class="mut">v${esc(a.version)} by ${esc(a.devName)}, ${fmt(a.size)}</small></div>
+  <button class="btn s" onclick="A.pub('${a.u}','${a.id}')">${a.status==="published"?"Publish update":"Approve and publish"}</button>
+  ${c?`<button class="btn o s" onclick="A.unpub('${a.u}','${a.id}')">Unpublish</button><button class="btn o s" onclick="A.flag('${a.id}','featured',${!!c.featured})">${c.featured?"Unfeature":"Feature"}</button><button class="btn o s" onclick="A.flag('${a.id}','trending',${!!c.trending})">${c.trending?"Untrend":"Trending"}</button>`:`<button class="btn o s" onclick="A.reject('${a.u}','${a.id}')">Reject</button>`}
+  <button class="btn r s" onclick="A.rm('${a.u}','${a.id}')">Remove</button></div>`}).join("")||'<p class="mut">No submissions yet.</p>'}
+ if(S.tab==="users"){const rq=Object.entries(await val("devRequests")||{}).filter(([,r])=>r.status==="pending"),us=Object.entries(await val("users")||{});
+  b=(rq.length?`<h2>Developer requests</h2>`+rq.map(([u,r])=>`<div class="it"><div class="g"><b>${esc(r.name)}</b> (${esc(r.company)})<br><small class="mut">${esc(r.note)}</small></div><button class="btn s" onclick="A.devOk('${u}')">Approve</button><button class="btn r s" onclick="A.devNo('${u}')">Reject</button></div>`).join(""):"")+`<h2>All accounts</h2>`+
+  us.map(([u,x])=>`<div class="it"><div class="g"><b>${esc(x.name)}</b> <span class="badge">${x.role}</span> <span class="badge ${x.status}">${x.status}</span><br><small class="mut">${esc(x.email)}</small></div>${x.role==="admin"?'<small class="mut">Super Admin</small>':`<button class="btn o s" onclick="A.role('${u}','${x.role==="developer"?"user":"developer"}')">${x.role==="developer"?"Revoke developer":"Make developer"}</button><button class="btn ${x.status==="banned"?"o":"r"} s" onclick="A.ban('${u}','${x.status==="banned"?"unban":"ban"}')">${x.status==="banned"?"Restore":"Suspend"}</button>`}</div>`).join("")}
+ if(S.tab==="rep"){b=Object.entries(await val("reports")||{}).map(([id,r])=>`<div class="it"><div class="g"><b>${esc(r.name||r.appId)}</b><br>${esc(r.reason)}<br><small class="mut">${dt(r.ts)}</small></div><a class="btn o s" href="#/app/${r.appId}">Open</a><button class="btn o s" onclick="A.dismiss('${id}')">Dismiss</button></div>`).join("")||'<p class="mut">No reports.</p>'}
+ if(S.tab==="rev"){const R=await val("reviews")||{};b=Object.entries(R).flatMap(([a,o])=>Object.entries(o).map(([u,x])=>`<div class="it"><div class="g"><b>${esc(cat[a]?.name||a)}</b> ${stars(x.rating)}<br>${esc(x.text)} <small class="mut">by ${esc(x.name)}</small></div><button class="btn r s" onclick="A.delRev('${a}','${u}')">Delete</button></div>`)).join("")||'<p class="mut">No reviews.</p>'}
+ if(S.tab==="cats"){const C=Object.entries(await val("categories")||{});b=`<div class="card"><input id="nc" placeholder="New category name" maxlength="30"><button class="btn" onclick="A.addCat()">Add category</button></div>`+C.map(([k,c])=>`<div class="it"><div class="g">${esc(c.name)}</div><button class="btn r s" onclick="A.delCat('${k}')">Delete</button></div>`).join("")+(C.length?"":'<p class="mut">Using the default categories. Add your own to replace them.</p>')}
+ return `<h2 style="margin-top:0">Admin</h2><div class="tabs">${T.map(t=>`<button class="chip ${S.tab===t[0]?"on":""}" onclick="A.tab('${t[0]}')">${t[1]}</button>`).join("")}</div>${b}`};
+
+V.setup=async()=>{const code=(id,t,f)=>`<h2>${t}</h2><p class="mut">Save as <b>${f}</b></p><button class="btn o s" onclick="A.copy('${id}')">Copy</button><pre id="${id}">${esc($("#t-"+id.slice(2)).textContent)}</pre>`;
+ return `<div class="logo">${LOGO}AppNest setup</div><div class="card"><h2 style="margin-top:0">Free setup, no Cloud Functions</h2><ol style="padding-left:20px;line-height:1.8">
+ <li>Firebase console, project <b>store-9062b</b>: enable <b>Authentication</b> (Email/Password and Google) and <b>Realtime Database</b>. Storage is optional (see step 5).</li>
+ <li>Get a free API key at <b>api.imgbb.com</b> and paste it into <code>IMGBB_KEY</code> near the top of this file's script. Icons and screenshots are hosted on ImgBB.</li>
+ <li>Add a Web app in Firebase, copy its config into <code>CFG</code> (apiKey, sender id, appId).</li>
+ <li>Realtime Database, Rules tab: paste the database rules below and publish.</li>
+ <li>APK files: developers either paste a direct https link (GitHub Releases, Cloudinary, your own host) or, if your project has Storage enabled, upload the file. If you use Storage, paste the storage rules below in its Rules tab.</li>
+ <li>Host the file for free: <code>firebase init hosting</code>, put this file in <code>public/index.html</code>, run <code>firebase deploy --only hosting</code>. Add your domain under Authentication, Settings, Authorized domains.</li>
+ <li><b>Admin initialization:</b> open the site and register right away. The first account to write <code>meta/superAdmin</code> wins; the database rules only allow that write once, so two simultaneous sign-ups cannot both become admin. Everyone after is a normal user. If a stray account registered first, delete the <code>users</code> and <code>meta</code> nodes and the Auth users, then register again.</li></ol></div>
+ <div class="card"><h2 style="margin-top:0">Database structure</h2><pre>meta/superAdmin            uid, write-once
+users/{uid}                name, email, role (admin|developer|user), status (active|banned), created
+devProfiles/{uid}          name, site, bio
+devRequests/{uid}          name, company, note, status
+apps/{ownerUid}/{appId}    private record: name, category, description, version, versionCode,
+                           changelog, apkUrl, size, icon, screenshots[], status, reviewNote
+catalog/{appId}            public published copy + downloads, featured, trending
+reviews/{appId}/{uid}      rating, text, name, ts
+favs/{uid}/{appId}         true
+history/{uid}/{pushId}     appId, name, icon, version, ts
+reports/{id}               appId, name, reason, by, ts
+categories/{id}            name</pre></div>
+ ${code("t-db","Realtime Database rules","database.rules.json")}${code("t-st","Storage rules (optional)","storage.rules")}
+ <p style="margin:16px 0"><a class="btn" href="#/">Back to AppNest</a></p>`};
+
+const up=(file,path,type,bar)=>new Promise((ok,no)=>{const r=sref(st,path),t=uploadBytesResumable(r,file,{contentType:type||file.type});
+ t.on("state_changed",s=>{bar.hidden=false;bar.value=s.bytesTransferred/s.totalBytes*100},no,()=>ok(r))});
+const imgbb=async f=>{if(IMGBB_KEY.startsWith("PASTE"))throw Error("Add your ImgBB API key (IMGBB_KEY) in the script");
+ if(!/^image\/(png|jpeg|webp)$/.test(f.type)||f.size>5242880)throw Error("Images must be PNG, JPG or WebP under 5 MB");
+ const d=new FormData();d.append("image",f);const j=await(await fetch("https://api.imgbb.com/1/upload?key="+IMGBB_KEY,{method:"POST",body:d})).json();
+ if(!j.success)throw Error(j.error?.message||"Image upload failed");return j.data.url};
+const A=window.A={
+ toggleReg(){S.reg=!S.reg;route()},
+ login:guard(async e=>{e.preventDefault();const f=e.target;
+  if(S.reg){regName=f.name.value.trim();const c=await createUserWithEmailAndPassword(auth,f.email.value,f.pw.value);await updateProfile(c.user,{displayName:regName})}
+  else await signInWithEmailAndPassword(auth,f.email.value,f.pw.value)}),
+ google:guard(()=>signInWithPopup(auth,new GoogleAuthProvider())),
+ out:()=>signOut(auth).then(()=>{location.hash="#/"}),
+ search(q){S.q=q;location.hash="#/search";route()},cat(c){S.c=c;location.hash="#/search";route()},
+ tab(t){S.tab=t;route()},
+ copy:guard(async id=>{await navigator.clipboard.writeText($("#"+id).textContent);toast("Copied")}),
+ saveName:guard(async()=>{const n=$("#pn").value.trim();if(!n)return;await updateProfile(auth.currentUser,{displayName:n});await set(ref(db,`users/${me.uid}/name`),n);me.name=n;toast("Saved")}),
+ reqDev:guard(async()=>{await set(ref(db,"devRequests/"+me.uid),{name:me.name,company:$("#dc").value.trim()||"-",note:$("#dn").value.trim()||"-",status:"pending",ts:Date.now()});toast("Request sent");route()}),
+ fav:guard(async(id,on)=>{await (on?remove:set)(ref(db,`favs/${me.uid}/${id}`),...(on?[]:[true]));route()}),
+ report:guard(async id=>{const r=prompt("What is wrong with this app?");if(!r)return;await push(ref(db,"reports"),{appId:id,name:cat[id].name,reason:r.slice(0,500),by:me.uid,ts:Date.now()});toast("Report sent")}),
+ review:guard(async id=>{await set(ref(db,`reviews/${id}/${me.uid}`),{rating:+$("#rt").value,text:$("#rx").value.trim().slice(0,1000),name:me.name,ts:Date.now()});toast("Review saved");route()}),
+ dl:guard(async id=>{const a=cat[id],bar=$("#pg");if(!a.apkUrl)throw Error("No download available");
+  await update(ref(db),{[`catalog/${id}/downloads`]:increment(1)}).catch(()=>{});
+  push(ref(db,"history/"+me.uid),{appId:id,name:a.name,icon:a.icon,version:a.version,ts:Date.now()}).catch(()=>{});bar.hidden=false;
+  try{const r=await fetch(a.apkUrl),L=+r.headers.get("content-length")||a.size,rd=r.body.getReader(),ch=[];let n=0;
+   for(;;){const {done,value}=await rd.read();if(done)break;ch.push(value);n+=value.length;bar.value=n/L*100}
+   const l=document.createElement("a");l.href=URL.createObjectURL(new Blob(ch,{type:"application/vnd.android.package-archive"}));l.download=a.name.replace(/\W+/g,"_")+"_"+a.version+".apk";l.click();toast("Download complete")}
+  catch{location.href=a.apkUrl}}),
+ saveProf:guard(async()=>{const n=$("#dpn").value.trim();if(!n)return toast("Enter a developer name");await set(ref(db,"devProfiles/"+me.uid),{name:n,site:$("#dpw").value.trim(),bio:$("#dpb").value.trim()});toast("Profile saved")}),
+ edit(i){E=i;route()},
+ delApp:guard(async i=>{if(!confirm("Delete this app? Published copies are removed by the admin."))return;await remove(ref(db,`apps/${me.uid}/${i}`));route()}),
+ save:guard(async e=>{e.preventDefault();const f=e.target,bar=$("#up"),btn=$("#sv");btn.disabled=true;
+  try{const old=E?await val(`apps/${me.uid}/${E}`):{},pf=await val("devProfiles/"+me.uid);
+   if(!pf)throw Error("Save your developer profile first");
+   const id=E||push(ref(db,"apps/"+me.uid)).key,vc=Math.floor(+f.vc.value),apk=f.apk.files[0],link=f.link.value.trim(),ic=f.icon.files[0],sh=[...f.shots.files].slice(0,6);
+   if(!E&&!(apk||link))throw Error("Add an APK file or a direct APK link");
+   if(!E&&!ic)throw Error("New apps need an icon");
+   const rec={...old,name:f.name.value.trim(),category:f.cat.value,description:f.desc.value.trim(),version:f.ver.value.trim(),versionCode:vc,changelog:f.log.value.trim(),status:"pending",ownerUid:me.uid,devName:pf.name,updated:Date.now()};delete rec.reviewNote;
+   if(apk||link){if(old.versionCode&&vc<=old.versionCode)throw Error("Version code must be higher than "+old.versionCode)}
+   else if(E&&vc!==old.versionCode)throw Error("Add a new APK or link to change the version code");
+   if(apk){
+    if(!/\.apk$/i.test(apk.name))throw Error("The file must have an .apk extension");
+    if(apk.size>150*1048576||apk.size<10240)throw Error("APK must be between 10 KB and 150 MB");
+    const h=new Uint8Array(await apk.slice(0,4).arrayBuffer());if(h[0]!==0x50||h[1]!==0x4B)throw Error("This file is not a valid APK (zip) archive");
+    try{rec.apkUrl=await getDownloadURL(await up(apk,`apks/${me.uid}/${id}/${vc}.apk`,"application/vnd.android.package-archive",bar))}
+    catch(x){throw Error("APK upload failed ("+(x.code||x.message)+"). If Storage is not enabled on your plan, paste a direct APK link instead.")}
+    rec.size=apk.size}
+   else if(link){if(!/^https:\/\//i.test(link))throw Error("The APK link must start with https://");const mb=+f.mb.value;if(!(mb>0))throw Error("Enter the APK size in MB");rec.apkUrl=link;rec.size=Math.round(mb*1048576)}
+   bar.hidden=false;bar.removeAttribute("value");
+   if(ic)rec.icon=await imgbb(ic);
+   if(sh.length){rec.screenshots=[];for(const s of sh)rec.screenshots.push(await imgbb(s))}
+   await set(ref(db,`apps/${me.uid}/${id}`),rec);E=null;toast("Submitted for review");route()}
+  finally{btn.disabled=false}}),
+ pub:guard(async(u,id)=>{const r=await val(`apps/${u}/${id}`),p={};
+  for(const k of ["name","category","description","icon","screenshots","version","versionCode","size","changelog","devName","ownerUid","updated","apkUrl"])p[`catalog/${id}/${k}`]=r[k]??null;
+  if(cat[id]?.downloads==null)p[`catalog/${id}/downloads`]=0;p[`apps/${u}/${id}/status`]="published";p[`apps/${u}/${id}/reviewNote`]=null;
+  await update(ref(db),p);await load();toast("Published");route()}),
+ unpub:guard(async(u,id)=>{await update(ref(db),{[`catalog/${id}`]:null,[`apps/${u}/${id}/status`]:"unpublished"});await load();route()}),
+ reject:guard(async(u,id)=>{const n=prompt("Reason for rejection (shown to the developer)");if(n===null)return;await update(ref(db),{[`apps/${u}/${id}/status`]:"rejected",[`apps/${u}/${id}/reviewNote`]:n.slice(0,300)});route()}),
+ flag:guard(async(id,k,on)=>{await set(ref(db,`catalog/${id}/${k}`),!on);await load();route()}),
+ rm:guard(async(u,id)=>{if(!confirm("Remove this app permanently? Files already uploaded to ImgBB or Storage are not deleted."))return;await update(ref(db),{[`apps/${u}/${id}`]:null,[`catalog/${id}`]:null,[`reviews/${id}`]:null});await load();route()}),
+ devOk:guard(async u=>{await update(ref(db),{[`users/${u}/role`]:"developer",[`devRequests/${u}/status`]:"approved"});route()}),
+ devNo:guard(async u=>{await set(ref(db,`devRequests/${u}/status`),"rejected");route()}),
+ role:guard(async(u,role)=>{await set(ref(db,`users/${u}/role`),role);route()}),
+ ban:guard(async(u,action)=>{if(!confirm(action==="ban"?"Suspend this account?":"Restore this account?"))return;await set(ref(db,`users/${u}/status`),action==="ban"?"banned":"active");route()}),
+ dismiss:guard(async id=>{await remove(ref(db,"reports/"+id));route()}),
+ delRev:guard(async(a,u)=>{await remove(ref(db,`reviews/${a}/${u}`));route()}),
+ addCat:guard(async()=>{const n=$("#nc").value.trim();if(!n)return;const C=await val("categories");if(!C)for(const c of DEFCATS)await push(ref(db,"categories"),{name:c});await push(ref(db,"categories"),{name:n});await load();route()}),
+ delCat:guard(async k=>{await remove(ref(db,"categories/"+k));await load();route()})
+};
+</script></body></html>
